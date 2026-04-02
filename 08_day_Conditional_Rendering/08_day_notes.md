@@ -1,19 +1,26 @@
 # Conditional Rendering
 
-As we can understand from the term, conditional rendering is a way to render different JSX or component at different condition. We can implement conditional rendering using regular if and else statement, ternary operator and &&.
+As we can understand from the term, conditional rendering is a way to render different JSX or components under different conditions. We can implement conditional rendering using regular `if` and `else` statements, the ternary operator, and `&&`.
 
-## Conditional Rendering using If and Else statement
+## Conditional Rendering Using If and Else Statements
 
-we can do this in Class Based and Funciton Based Components. we will try to see in both ways .
+We can do this in both class-based and function-based components. We will look at both ways.
 
-1) In Funciton Components:
+1. In function components:
 
 ```jsx
 import React from 'react'
 import { useState } from 'react'
 
-const Header = ({ data , message, status, changeStatus}) => {
-  const { welcome, title, subtitle, author: { firstName, lastName }, date } = data
+const Header = ({ data, message, status, changeStatus }) => {
+  const {
+    welcome,
+    title,
+    subtitle,
+    author: { firstName, lastName },
+    date,
+  } = data
+
   return (
     <>
       <header>
@@ -27,7 +34,7 @@ const Header = ({ data , message, status, changeStatus}) => {
           <small>{date}</small>
           <p>Select a country for your next holiday</p>
           <h1>{message}</h1>
-          <button onClick={changeStatus}>{status ? 'Login' : 'Logout' }</button>
+          <button onClick={changeStatus}>{status ? 'Login' : 'Logout'}</button>
         </div>
       </header>
     </>
@@ -35,16 +42,15 @@ const Header = ({ data , message, status, changeStatus}) => {
 }
 
 const App = () => {
-
-  const [status, setStatus] = useState(false);
-  const [message, setMessage] = useState('Hi please click the button')
+  const [status, setStatus] = useState(false)
+  const [message, setMessage] = useState('Hi, please click the button')
 
   const changeStatus = () => {
     if (status) {
-      setMessage('You are already Logged in')
+      setMessage('You are already logged in')
       setStatus(false)
     } else {
-      setMessage('Please Login')
+      setMessage('Please log in')
       setStatus(true)
     }
   }
@@ -62,17 +68,22 @@ const App = () => {
 
   return (
     <>
-      <Header data={data} changeStatus={changeStatus} message={message} status={status}/>
+      <Header
+        data={data}
+        changeStatus={changeStatus}
+        message={message}
+        status={status}
+      />
     </>
   )
 }
 
 export default App
+```
 
-2) In Class Component
+2. In class components:
 
 ```jsx
-
 import React, { Component } from 'react'
 
 class Header extends Component {
@@ -96,8 +107,10 @@ class Header extends Component {
           </p>
           <small>{date}</small>
           <p>Select a country for your next holiday</p>
-          <h1>{this.props.loggedIn ? "You are already logged in" : "Please Login"}</h1>
-          <button onClick={this.props.changeStatus}>{this.props.loggedIn ? 'Logout' : "Login"}</button>
+          <h1>{this.props.loggedIn ? 'You are already logged in' : 'Please log in'}</h1>
+          <button onClick={this.props.changeStatus}>
+            {this.props.loggedIn ? 'Logout' : 'Login'}
+          </button>
         </div>
       </header>
     )
@@ -106,23 +119,24 @@ class Header extends Component {
 
 export default class App extends Component {
   state = {
-    loggedIn: false
+    loggedIn: false,
   }
 
   changeStatus = () => {
     // if (this.state.loggedIn) {
     //   this.setState({
-    //     loggedIn: false
+    //     loggedIn: false,
     //   })
     // } else {
     //   this.setState({
-    //     loggedIn: true
+    //     loggedIn: true,
     //   })
     // }
 
-    // or else
+    // Or,
     this.setState({
-    loggedIn: !this.state.loggedIn})
+      loggedIn: !this.state.loggedIn,
+    })
   }
 
   render() {
@@ -137,39 +151,42 @@ export default class App extends Component {
       date: 'Apr 1, 2026',
     }
 
-
-
     return (
       <>
-        <Header data={data} changeStatus={this.changeStatus} loggedIn={this.state.loggedIn} />
+        <Header
+          data={data}
+          changeStatus={this.changeStatus}
+          loggedIn={this.state.loggedIn}
+        />
       </>
     )
   }
 }
+```
 
+## Conditional Rendering Using the Ternary Operator
 
-## Conditional Rendering using Ternary Operator
-
-Ternary operator is an an alternative for if else statement. However, there is more use cases for ternary operator than if else statement. For example, use can use ternary operator inside styles, className or many places in a component than regular if else statement.
+The ternary operator is an alternative to an `if...else` statement. However, it has more use cases than a regular `if...else` statement. For example, you can use the ternary operator inside styles, `className`, or many other places in a component.
 
 ```jsx
 <Button
-          text={this.state.loggedIn ? 'Logout' : 'Login'}
-          style={buttonStyles}
-          onClick={this.handleLogin}
-        />
+  text={this.state.loggedIn ? 'Logout' : 'Login'}
+  style={buttonStyles}
+  onClick={this.handleLogin}
+/>
+```
 
-
-In addition to JSX, we can also conditionally render a component. Let's change the above conditional JSX to a component.
+In addition to JSX, we can also conditionally render a component. Let's change the above conditional JSX into a component.
 
 ```jsx
 import React, { Component } from 'react'
 
 const Login = () => (
   <div>
-    <h1>Please Login</h1>
+    <h1>Please log in</h1>
   </div>
 )
+
 const Welcome = () => (
   <div>
     <h1>Welcome to 30 Days Of React</h1>
@@ -198,7 +215,9 @@ class Header extends Component {
           <small>{date}</small>
           <p>Select a country for your next holiday</p>
           <h1>{this.props.loggedIn ? <Welcome /> : <Login />}</h1>
-          <button onClick={this.props.changeStatus}>{this.props.loggedIn ? 'Logout' : "Login"}</button>
+          <button onClick={this.props.changeStatus}>
+            {this.props.loggedIn ? 'Logout' : 'Login'}
+          </button>
         </div>
       </header>
     )
@@ -207,17 +226,17 @@ class Header extends Component {
 
 export default class App extends Component {
   state = {
-    loggedIn: false
+    loggedIn: false,
   }
 
   changeStatus = () => {
     if (this.state.loggedIn) {
       this.setState({
-        loggedIn: false
+        loggedIn: false,
       })
     } else {
       this.setState({
-        loggedIn: true
+        loggedIn: true,
       })
     }
   }
@@ -234,23 +253,25 @@ export default class App extends Component {
       date: 'Apr 1, 2026',
     }
 
-
-
     return (
       <>
-        <Header data={data} changeStatus={this.changeStatus} loggedIn={this.state.loggedIn} />
+        <Header
+          data={data}
+          changeStatus={this.changeStatus}
+          loggedIn={this.state.loggedIn}
+        />
       </>
     )
   }
 }
+```
 
-## Conditional Rendering using && Operator
+## Conditional Rendering Using the `&&` Operator
 
-The && operator render the right JSX operand if the left operand(expression) is true.
+The `&&` operator renders the JSX on the right side if the expression on the left side is true.
 
 ```jsx
 import React from 'react'
-
 
 // A button component
 const Button = ({ text, onClick, style }) => (
@@ -271,7 +292,7 @@ const buttonStyles = {
   color: 'white',
 }
 
-// class based component
+// Class-based component
 class Header extends React.Component {
   render() {
     console.log(this.props.data)
@@ -298,12 +319,14 @@ class Header extends React.Component {
     )
   }
 }
+
 const Login = () => (
   <div>
-    <h3>Please Login</h3>
+    <h3>Please log in</h3>
   </div>
 )
-const Welcome = (props) => (
+
+const Welcome = () => (
   <div>
     <h1>Welcome to 30 Days Of React</h1>
   </div>
@@ -314,6 +337,7 @@ class App extends React.Component {
     loggedIn: false,
     techs: ['HTML', 'CSS', 'JS'],
   }
+
   handleLogin = () => {
     this.setState((prevState) => ({
       loggedIn: !prevState.loggedIn,
@@ -321,7 +345,7 @@ class App extends React.Component {
   }
 
   render() {
-     const data = {
+    const data = {
       welcome: 'Library',
       title: 'Learn React Course',
       subtitle: 'React Project',
@@ -332,10 +356,7 @@ class App extends React.Component {
       date: '2026',
     }
 
-    // We can destructure state
-
     const { loggedIn, techs } = this.state
-
     const status = loggedIn ? <Welcome /> : <Login />
 
     return (
@@ -348,11 +369,11 @@ class App extends React.Component {
           onClick={this.handleLogin}
         />
         {techs.length >= 3 && (
-          <p>You have all the prerequisite courses to get started React</p>
+          <p>You have all the prerequisite courses to get started with React</p>
         )}
         {!loggedIn && (
           <p>
-            Please login to access more information about 30 Days Of React
+            Please log in to access more information about the 30 Days Of React
             challenge
           </p>
         )}
@@ -362,15 +383,16 @@ class App extends React.Component {
 }
 
 export default App
+```
 
-In the previous section, we used alert box to greet people and also to display time. Let's render the greeting and time on browser DOM instead of displaying on alert box.
+In the previous section, we used an alert box to greet people and also to display the time. Let's render the greeting and time in the browser DOM instead of displaying them in an alert box.
 
 ```jsx
 // index.js
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-// class based component
+// Class-based component
 class Header extends React.Component {
   render() {
     console.log(this.props.data)
@@ -403,12 +425,14 @@ const Message = ({ message }) => (
     <h1>{message}</h1>
   </div>
 )
+
 const Login = () => (
   <div>
-    <h3>Please Login</h3>
+    <h3>Please log in</h3>
   </div>
 )
-const Welcome = (props) => (
+
+const Welcome = () => (
   <div>
     <h1>Welcome to 30 Days Of React</h1>
   </div>
@@ -421,8 +445,8 @@ const Button = ({ text, onClick, style }) => (
   </button>
 )
 
-// TechList Component
-// class base component
+// TechList component
+// Class-based component
 class TechList extends React.Component {
   render() {
     const { techs } = this.props
@@ -431,8 +455,8 @@ class TechList extends React.Component {
   }
 }
 
-// Main Component
-// Class Component
+// Main component
+// Class component
 class Main extends React.Component {
   render() {
     const {
@@ -443,31 +467,34 @@ class Main extends React.Component {
       handleLogin,
       message,
     } = this.props
+
     console.log(message)
 
     const status = loggedIn ? <Welcome /> : <Login />
+
     return (
       <main>
         <div className='main-wrapper'>
-          <p>Prerequisite to get started react.js:</p>
+          <p>Prerequisites to get started with React.js:</p>
           <ul>
             <TechList techs={this.props.techs} />
           </ul>
           {techs.length >= 3 && (
-            <p>You have all the prerequisite courses to get started React</p>
+            <p>You have all the prerequisite courses to get started with React</p>
           )}
           <div>
-            <Button
-              text='Show Time'
-              onClick={handleTime}
-              style={buttonStyles}
-            />{' '}
+            <Button text='Show Time' onClick={handleTime} style={buttonStyles} />{' '}
             <Button
               text='Greet People'
               onClick={greetPeople}
               style={buttonStyles}
             />
-            {!loggedIn && <p>Please login to access more information about 30 Days Of React challenge</p>}
+            {!loggedIn && (
+              <p>
+                Please log in to access more information about the 30 Days Of
+                React challenge
+              </p>
+            )}
           </div>
           <div style={{ margin: 30 }}>
             <Button
@@ -497,12 +524,13 @@ const buttonStyles = {
   color: 'white',
 }
 
-// Footer Component
+// Footer component
 // Class component
 class Footer extends React.Component {
   constructor(props) {
     super(props)
   }
+
   render() {
     return (
       <footer>
@@ -518,13 +546,15 @@ class App extends React.Component {
   state = {
     loggedIn: false,
     techs: ['HTML', 'CSS', 'JS'],
-    message: 'Click show time or Greet people to change me',
+    message: 'Click Show Time or Greet People to change me',
   }
+
   handleLogin = () => {
     this.setState({
       loggedIn: !this.state.loggedIn,
     })
   }
+
   showDate = (time) => {
     const months = [
       'January',
@@ -546,17 +576,19 @@ class App extends React.Component {
     const date = time.getDate()
     return `${month} ${date}, ${year}`
   }
+
   handleTime = () => {
     let message = this.showDate(new Date())
     this.setState({ message })
   }
+
   greetPeople = () => {
-    let message = 'Welcome to the Page'
+    let message = 'Welcome to the page'
     this.setState({ message })
   }
 
   render() {
-     const data = {
+    const data = {
       welcome: 'Library',
       title: 'Learn React Course',
       subtitle: 'React Project',
@@ -587,3 +619,10 @@ class App extends React.Component {
 }
 
 export default App
+```
+
+## Exercises
+
+1. What is conditional rendering?
+2. How do you implement conditional rendering?
+3. Which method of conditional rendering do you prefer to use?
