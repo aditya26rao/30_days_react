@@ -46,7 +46,6 @@ import React, { useState, useEffect } from 'react'
 const Loading = () => (
   <h2 style={{ color: 'gray' }}>Loading data... ⏳</h2>
 )
-
 // 📦 Data Component
 const Data = ({ users }) => (
   <div>
