@@ -1379,6 +1379,309 @@ export default App
 - A checkbox returns `true` or `false` through `e.target.checked`.
 - A controlled input is an input whose value is managed by React state.
 
+## Validating Data Using the NPM Package `validator`
+
+Before using `validator`, we need to install it with npm:
+
+```bash
+npm i validator
+```
+
+Here is an example.
+
+### Without `validator.js`
+
+```jsx
+import React, { useState } from 'react'
+
+const App = () => {
+  const [loginForm, setLoginForm] = useState({
+    userName: '',
+    password1: '',
+    password2: '',
+    email: '',
+    errors: {},
+  })
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+
+    setLoginForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  const validate = () => {
+    const errors = {}
+
+    if (!loginForm.userName.trim()) {
+      errors.userName = 'User name is required'
+    } else if (loginForm.userName.length < 3 || loginForm.userName.length > 12) {
+      errors.userName = 'User name must be 3-12 characters'
+    }
+
+    if (!loginForm.email.trim()) {
+      errors.email = 'Email is required'
+    } else if (!/\S+@\S+\.\S+/.test(loginForm.email)) {
+      errors.email = 'Invalid email'
+    }
+
+    if (!loginForm.password1) {
+      errors.password = 'Password is required'
+    } else if (loginForm.password1.length < 8) {
+      errors.password = 'Password must be at least 8 characters'
+    } else if (loginForm.password1 !== loginForm.password2) {
+      errors.password = 'Passwords do not match'
+    }
+
+    return errors
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    const errors = validate()
+
+    if (Object.keys(errors).length > 0) {
+      setLoginForm((prev) => ({
+        ...prev,
+        errors,
+      }))
+      return
+    }
+
+    alert('Form submitted successfully')
+  }
+
+  return (
+    <form className='app' onSubmit={handleSubmit}>
+      <div className='form-data'>
+        <label>User Name: </label>
+        <input
+          type='text'
+          name='userName'
+          value={loginForm.userName}
+          onChange={handleChange}
+        />
+        {loginForm.errors.userName && (
+          <p style={{ color: 'red' }}>{loginForm.errors.userName}</p>
+        )}
+      </div>
+
+      <div className='form-data'>
+        <label>Email: </label>
+        <input
+          type='email'
+          name='email'
+          value={loginForm.email}
+          onChange={handleChange}
+        />
+        {loginForm.errors.email && (
+          <p style={{ color: 'red' }}>{loginForm.errors.email}</p>
+        )}
+      </div>
+
+      <div className='form-data'>
+        <label>Password: </label>
+        <input
+          type='password'
+          name='password1'
+          value={loginForm.password1}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className='form-data'>
+        <label>Confirm Password: </label>
+        <input
+          type='password'
+          name='password2'
+          value={loginForm.password2}
+          onChange={handleChange}
+        />
+        {loginForm.errors.password && (
+          <p style={{ color: 'red' }}>{loginForm.errors.password}</p>
+        )}
+      </div>
+
+      <button type='submit'>Submit</button>
+    </form>
+  )
+}
+
+export default App
+```
+
+### With `validator.js`
+
+```jsx
+import React, { useState } from 'react'
+import validator from 'validator'
+
+const App = () => {
+  const [loginForm, setLoginForm] = useState({
+    userName: '',
+    password1: '',
+    password2: '',
+    email: '',
+    errors: {},
+  })
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+
+    setLoginForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  const validate = () => {
+    const errors = {}
+
+    if (validator.isEmpty(loginForm.userName)) {
+      errors.userName = 'User name is required'
+    } else if (!validator.isLength(loginForm.userName, { min: 3, max: 12 })) {
+      errors.userName = 'User name must be 3-12 characters'
+    }
+
+    if (validator.isEmpty(loginForm.email)) {
+      errors.email = 'Email is required'
+    } else if (!validator.isEmail(loginForm.email)) {
+      errors.email = 'Invalid email'
+    }
+
+    if (validator.isEmpty(loginForm.password1)) {
+      errors.password = 'Password is required'
+    } else if (!validator.isLength(loginForm.password1, { min: 8 })) {
+      errors.password = 'Password must be at least 8 characters'
+    } else if (!validator.equals(loginForm.password1, loginForm.password2)) {
+      errors.password = 'Passwords do not match'
+    }
+
+    return errors
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    const errors = validate()
+
+    if (Object.keys(errors).length > 0) {
+      setLoginForm((prev) => ({
+        ...prev,
+        errors,
+      }))
+      return
+    }
+
+    alert('Form submitted successfully')
+  }
+
+  return (
+    <form className='app' onSubmit={handleSubmit}>
+      <div className='form-data'>
+        <label>User Name: </label>
+        <input
+          type='text'
+          name='userName'
+          value={loginForm.userName}
+          onChange={handleChange}
+        />
+        {loginForm.errors.userName && (
+          <p style={{ color: 'red' }}>{loginForm.errors.userName}</p>
+        )}
+      </div>
+
+      <div className='form-data'>
+        <label>Email: </label>
+        <input
+          type='email'
+          name='email'
+          value={loginForm.email}
+          onChange={handleChange}
+        />
+        {loginForm.errors.email && (
+          <p style={{ color: 'red' }}>{loginForm.errors.email}</p>
+        )}
+      </div>
+
+      <div className='form-data'>
+        <label>Password: </label>
+        <input
+          type='password'
+          name='password1'
+          value={loginForm.password1}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className='form-data'>
+        <label>Confirm Password: </label>
+        <input
+          type='password'
+          name='password2'
+          value={loginForm.password2}
+          onChange={handleChange}
+        />
+        {loginForm.errors.password && (
+          <p style={{ color: 'red' }}>{loginForm.errors.password}</p>
+        )}
+      </div>
+
+      <button type='submit'>Submit</button>
+    </form>
+  )
+}
+
+export default App
+```
+
+## How to Use `validator.js`
+
+First, install it:
+
+```bash
+npm install validator
+```
+
+Then import it into your React file:
+
+```jsx
+import validator from 'validator'
+```
+
+Example validation logic:
+
+```jsx
+const validate = () => {
+  const errors = {}
+
+  if (validator.isEmpty(loginForm.userName)) {
+    errors.userName = 'User name is required'
+  } else if (!validator.isLength(loginForm.userName, { min: 3, max: 12 })) {
+    errors.userName = 'User name must be 3-12 characters'
+  }
+
+  if (validator.isEmpty(loginForm.email)) {
+    errors.email = 'Email is required'
+  } else if (!validator.isEmail(loginForm.email)) {
+    errors.email = 'Invalid email'
+  }
+
+  if (validator.isEmpty(loginForm.password1)) {
+    errors.password = 'Password is required'
+  } else if (!validator.isLength(loginForm.password1, { min: 8 })) {
+    errors.password = 'Password must be at least 8 characters'
+  } else if (!validator.equals(loginForm.password1, loginForm.password2)) {
+    errors.password = 'Passwords do not match'
+  }
+
+  return errors
+}
+```
+
 ## Exercises
 
 1. What is the importance of a form?
