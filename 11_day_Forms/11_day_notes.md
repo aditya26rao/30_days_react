@@ -1,12 +1,12 @@
 # Forms
 
-Form is used to collect data from a user. Once in a while we use form to fill our information on a paper or on a website.
+A form is used to collect data from a user. We use forms on websites to submit information such as names, emails, passwords, phone numbers, dates, feedback, and file uploads.
 
-we fill different form fields to submit our data to remote database. We encounter different form fields when we fill a form such as simple text, email, password, telephone, date, checkbox, radio button, option selection and text area field. Currently, HTML5 has provide quite a lot of field types. 
+Common form fields include text input, email, password, telephone, date, checkbox, radio button, select options, and textarea. HTML5 provides many useful input types.
 
-You may have a look at the following available HTML5 input types.
+## Common HTML Input Types
 
-```cmd
+```html
 <input type="text" />
 <input type="number" />
 <input type="range" />
@@ -36,11 +36,12 @@ You may have a look at the following available HTML5 input types.
 <input type="search" />
 <input type="submit" />
 <input type="button" />
+```
 
-Another HTML fields to get data from a form are textarea and select with options elements.
+Other HTML elements used in forms are `textarea` and `select`.
 
-```cmd
-<textarea>Please write your comment ...</textarea>
+```html
+<textarea>Please write your comment...</textarea>
 
 <select name="country">
   <option value="">Select your country</option>
@@ -50,18 +51,25 @@ Another HTML fields to get data from a form are textarea and select with options
   <option value="norway">Norway</option>
   <option value="iceland">Iceland</option>
 </select>
+```
 
-Now, you know most of the fields we need to get data from a form
+## Getting Data from an Input Field
 
-## Getting data from an input field
+To get data from an input field in React, we usually need:
 
-So far we did not get any data from input field. Now, it is time to learn how to get data from an input field. We need an input field, event listener (onChange) and state to get data from a controlled input
+- an input field
+- state to store the value
+- an event handler such as `onChange`
 
-The input element has many attributes such as value, name, id, placeholder, type and event handler. In addition, we can link a label and an input field using an id of input field and htmlFor of the label.If label and input are linked it will focus the input when we click on label. Look at the example give below.
+This is called a controlled input because React controls the input value through state.
 
-in Functional Component
+The input element can have attributes such as `value`, `name`, `id`, `placeholder`, and `type`. We can connect a `label` to an input using the input's `id` and the label's `htmlFor`. When they are linked, clicking the label focuses the input.
+
+## Single Input Example
+
+### Function Component
+
 ```jsx
-
 import React, { useState } from 'react'
 
 const App = () => {
@@ -73,12 +81,11 @@ const App = () => {
 
   return (
     <div className='App'>
-      <label htmlFor="userName">User Name: </label>
-
+      <label htmlFor='userName'>User Name: </label>
       <input
-        type="text"
-        id="userName"
-        name="userName"
+        type='text'
+        id='userName'
+        name='userName'
         value={userName}
         onChange={handleChange}
       />
@@ -89,42 +96,56 @@ const App = () => {
 }
 
 export default App
+```
 
-in Class Component
+### Class Component
+
 ```jsx
 import React from 'react'
 
 class App extends React.Component {
   state = {
-    userName: ''
+    userName: '',
   }
+
   handleChange = (e) => {
     this.setState({
-      userName: e.target.value
+      userName: e.target.value,
     })
   }
 
   render() {
     return (
       <div className='App'>
-        <label htmlFor="userName">User Name</label>
-        <input type="text" id='userName' name='userName' value={this.state.userName} onChange={this.handleChange} />
-        {this.state.userName}
+        <label htmlFor='userName'>User Name: </label>
+        <input
+          type='text'
+          id='userName'
+          name='userName'
+          value={this.state.userName}
+          onChange={this.handleChange}
+        />
+
+        <h3>{this.state.userName}</h3>
       </div>
     )
   }
-
 }
 
 export default App
+```
 
-## Getting multiple input data from form
+## Getting Multiple Input Values from a Form
 
-In this section we will develop a small form which collect user information. Our user is a student. We use a parent form element and certain number of input elements to collect user information. In addition to that we will have event listener for the form (onSubmit) and for the inputs (onChange)
+In this section, we collect multiple values from a form. We use:
 
-in Class Component
+- `onChange` for each input
+- `onSubmit` for the form
+- state to store all input values
+
+### Class Component
+
 ```jsx
-
 import React, { Component } from 'react'
 
 export default class App extends Component {
@@ -132,25 +153,25 @@ export default class App extends Component {
     firstName: '',
     lastName: '',
     country: '',
-    title: ''
+    title: '',
   }
 
   handleChange = (e) => {
     const { name, value } = e.target
 
     this.setState({
-      [name]: value
+      [name]: value,
     })
   }
 
-  handleSubmit = (e) =>{
+  handleSubmit = (e) => {
     e.preventDefault()
-
     console.log(this.state)
   }
 
   render() {
     const { firstName, lastName, title, country } = this.state
+
     return (
       <div className='App'>
         <h3>Add Student</h3>
@@ -164,6 +185,7 @@ export default class App extends Component {
               onChange={this.handleChange}
             />
           </div>
+
           <div>
             <input
               type='text'
@@ -173,6 +195,7 @@ export default class App extends Component {
               onChange={this.handleChange}
             />
           </div>
+
           <div>
             <input
               type='text'
@@ -182,6 +205,7 @@ export default class App extends Component {
               onChange={this.handleChange}
             />
           </div>
+
           <div>
             <input
               type='text'
@@ -198,9 +222,10 @@ export default class App extends Component {
     )
   }
 }
+```
 
+### Function Component
 
-in Functional Component
 ```jsx
 import React, { useState } from 'react'
 
@@ -209,7 +234,7 @@ const App = () => {
     firstName: '',
     lastName: '',
     country: '',
-    title: ''
+    title: '',
   })
 
   const handleChange = (e) => {
@@ -217,7 +242,7 @@ const App = () => {
 
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     })
   }
 
@@ -278,18 +303,19 @@ const App = () => {
 }
 
 export default App
+```
 
-The above form handles only text types but do have different input field types. Let's do another form which handle all the different input field types.
+The forms above handle only text inputs. In real applications, forms usually contain different field types.
 
-## Get data from different input field types
+## Getting Data from Different Input Types
 
- in Class Component
+### Class Component
 
 ```jsx
 import React, { Component } from 'react'
 
 const options = [
-  { value: '', label: '-- Select Country--' },
+  { value: '', label: '-- Select Country --' },
   { value: 'Finland', label: 'Finland' },
   { value: 'Sweden', label: 'Sweden' },
   { value: 'Norway', label: 'Norway' },
@@ -313,7 +339,7 @@ export default class App extends Component {
     favoriteColor: '',
     weight: '',
     gender: '',
-    file: '',
+    file: null,
     bio: '',
     skills: {
       html: false,
@@ -357,14 +383,9 @@ export default class App extends Component {
       skills,
     } = this.state
 
-    // Convert skills object to array
-  const formattedSkills = []
-    for (const key in skills) {
-      console.log(key)
-      if (skills[key]) {
-        formattedSkills.push(key.toUpperCase())
-      }
-    }
+    const formattedSkills = Object.keys(skills)
+      .filter((key) => skills[key])
+      .map((key) => key.toUpperCase())
 
     const data = {
       firstName,
@@ -390,7 +411,6 @@ export default class App extends Component {
         <h3>Add Student</h3>
 
         <form onSubmit={this.handleSubmit}>
-          {/* Name Fields */}
           <div className='row'>
             <div className='form-group'>
               <label>First Name</label>
@@ -426,7 +446,6 @@ export default class App extends Component {
             </div>
           </div>
 
-          {/* Contact */}
           <div className='form-group'>
             <label>Telephone</label>
             <input
@@ -438,7 +457,6 @@ export default class App extends Component {
             />
           </div>
 
-          {/* DOB */}
           <div className='form-group'>
             <label>Date of Birth</label>
             <input
@@ -449,7 +467,6 @@ export default class App extends Component {
             />
           </div>
 
-          {/* Color */}
           <div className='form-group'>
             <label>Favorite Color</label>
             <input
@@ -460,7 +477,6 @@ export default class App extends Component {
             />
           </div>
 
-          {/* Weight */}
           <div className='form-group'>
             <label>Weight (Kg)</label>
             <input
@@ -472,7 +488,6 @@ export default class App extends Component {
             />
           </div>
 
-          {/* Country */}
           <div>
             <label>Country</label>
             <br />
@@ -485,7 +500,6 @@ export default class App extends Component {
             </select>
           </div>
 
-          {/* Gender */}
           <div>
             <p>Gender</p>
 
@@ -517,7 +531,6 @@ export default class App extends Component {
             <label>Other</label>
           </div>
 
-          {/* Skills */}
           <div>
             <p>Select your skills</p>
 
@@ -546,7 +559,6 @@ export default class App extends Component {
             <label>JavaScript</label>
           </div>
 
-          {/* Bio */}
           <div>
             <label>Bio</label>
             <br />
@@ -560,12 +572,10 @@ export default class App extends Component {
             />
           </div>
 
-          {/* File */}
           <div>
             <input type='file' name='file' onChange={this.handleChange} />
           </div>
 
-          {/* Submit */}
           <div>
             <button type='submit'>Submit</button>
           </div>
@@ -574,13 +584,15 @@ export default class App extends Component {
     )
   }
 }
+```
 
-In Functional Component
+### Function Component
+
 ```jsx
 import React, { useState } from 'react'
 
 const options = [
-  { value: '', label: '-- Select Country--' },
+  { value: '', label: '-- Select Country --' },
   { value: 'Finland', label: 'Finland' },
   { value: 'Sweden', label: 'Sweden' },
   { value: 'Norway', label: 'Norway' },
@@ -604,13 +616,13 @@ const App = () => {
     favoriteColor: '',
     weight: '',
     gender: '',
-    file: '',
+    file: null,
     bio: '',
     skills: {
       html: false,
       css: false,
       javascript: false,
-    }
+    },
   })
 
   const handleChange = (e) => {
@@ -639,7 +651,17 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(formData) // ✅ skills stays object
+
+    const formattedSkills = Object.keys(formData.skills)
+      .filter((key) => formData.skills[key])
+      .map((key) => key.toUpperCase())
+
+    const data = {
+      ...formData,
+      skills: formattedSkills,
+    }
+
+    console.log(data)
   }
 
   return (
@@ -709,14 +731,14 @@ const App = () => {
           {selectOptions}
         </select>
 
-        {/* Gender */}
         <input
           type='radio'
           name='gender'
           value='Male'
           checked={formData.gender === 'Male'}
           onChange={handleChange}
-        /> Male
+        />{' '}
+        Male
 
         <input
           type='radio'
@@ -724,41 +746,36 @@ const App = () => {
           value='Female'
           checked={formData.gender === 'Female'}
           onChange={handleChange}
-        /> Female
+        />{' '}
+        Female
 
-        {/* Skills */}
         <input
           type='checkbox'
           name='html'
           checked={formData.skills.html}
           onChange={handleChange}
-        /> HTML
+        />{' '}
+        HTML
 
         <input
           type='checkbox'
           name='css'
           checked={formData.skills.css}
           onChange={handleChange}
-        /> CSS
+        />{' '}
+        CSS
 
         <input
           type='checkbox'
           name='javascript'
           checked={formData.skills.javascript}
           onChange={handleChange}
-        /> JS
+        />{' '}
+        JavaScript
 
-        <textarea
-          name='bio'
-          value={formData.bio}
-          onChange={handleChange}
-        />
+        <textarea name='bio' value={formData.bio} onChange={handleChange} />
 
-        <input
-          type='file'
-          name='file'
-          onChange={handleChange}
-        />
+        <input type='file' name='file' onChange={handleChange} />
 
         <button type='submit'>Submit</button>
       </form>
@@ -767,34 +784,615 @@ const App = () => {
 }
 
 export default App
+```
 
-In FUnction Componet, if we want to update a state, we do like htis , bewlow example
-Normal Update
+## Updating State in a Function Component
+
+### Normal update
+
 ```jsx
 setFormData({
   ...formData,
-  [name]: value
+  [name]: value,
 })
+```
 
-Nested Update
+### Nested update
+
 ```jsx
-skills: {
-  ...formData.skills,
-  [name]: checked
-}
+setFormData({
+  ...formData,
+  skills: {
+    ...formData.skills,
+    [name]: checked,
+  },
+})
+```
 
 ## Form Validation
 
-### What is Validation ?
-The action or process of checking or proving the validity or accuracy of something in this case data.
+### What is validation?
+Validation is the process of checking whether data is correct, complete, and in the expected format.
 
-### What is the purpose of validation
-The main purpose to validation is to get a desired data from users. In addition, to prevent malicious users and data.
+### Why is validation important?
+Validation helps us:
 
-## Validation Types
-1) Client Side
-2) Server Side
+- collect the correct data from users
+- improve user experience
+- reduce invalid submissions
+- prevent some malicious or unwanted input
 
-Validation can be done in client side or sever side. At the moment, we are using React which is a front end technology and we use client side validation.A validation can implement using HTML5 built-in validation or using JavaScript(using regular expression).
+## Types of Validation
 
-In the following snippet of code, a validation has been implemented the first field. Try to understand how it works. The onBlur event has been used to check validity when the input is not focused.
+1. Client-side validation
+2. Server-side validation
+
+Validation can be done on the client side or the server side. Since React is a front-end library, we usually start with client-side validation. Validation can be implemented using HTML5 built-in validation or JavaScript logic such as regular expressions.
+
+The `onBlur` event is often used to validate a field when the input loses focus.
+
+## Validation Example
+
+### Class Component
+
+```jsx
+import React, { Component } from 'react'
+
+const options = [
+  { value: '', label: '-- Select Country --' },
+  { value: 'Finland', label: 'Finland' },
+  { value: 'Sweden', label: 'Sweden' },
+  { value: 'Norway', label: 'Norway' },
+  { value: 'Denmark', label: 'Denmark' },
+]
+
+const selectedOptions = options.map(({ value, label }) => (
+  <option key={value} value={value}>
+    {label}
+  </option>
+))
+
+export default class App extends Component {
+  state = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    country: '',
+    tel: '',
+    dateOfBirth: '',
+    favoriteColor: '',
+    weight: '',
+    gender: '',
+    file: null,
+    bio: '',
+    skills: {
+      html: false,
+      css: false,
+      javascript: false,
+    },
+    errors: {},
+  }
+
+  handleChange = (e) => {
+    const { name, value, type, checked, files } = e.target
+
+    if (type === 'checkbox') {
+      this.setState((prev) => ({
+        ...prev,
+        skills: {
+          ...prev.skills,
+          [name]: checked,
+        },
+      }))
+    } else if (type === 'file') {
+      this.setState({ [name]: files[0] })
+    } else {
+      this.setState({ [name]: value })
+    }
+  }
+
+  validate = () => {
+    const errors = {}
+
+    if (!this.state.firstName) {
+      errors.firstName = 'First name is required'
+    } else if (
+      this.state.firstName.length < 3 ||
+      this.state.firstName.length > 12
+    ) {
+      errors.firstName = 'First name must be 3-12 characters'
+    }
+
+    if (!this.state.lastName) {
+      errors.lastName = 'Last name is required'
+    }
+
+    if (!this.state.email || !this.state.email.includes('@')) {
+      errors.email = 'Valid email is required'
+    }
+
+    if (!this.state.tel) {
+      errors.tel = 'Phone number is required'
+    }
+
+    if (!this.state.country) {
+      errors.country = 'Please select a country'
+    }
+
+    if (!this.state.gender) {
+      errors.gender = 'Please select gender'
+    }
+
+    return errors
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault()
+
+    const errors = this.validate()
+
+    if (Object.keys(errors).length > 0) {
+      this.setState({ errors })
+      return
+    }
+
+    const formattedSkills = Object.keys(this.state.skills)
+      .filter((key) => this.state.skills[key])
+      .map((key) => key.toUpperCase())
+
+    const data = {
+      ...this.state,
+      skills: formattedSkills,
+      errors: {},
+    }
+
+    console.log('Submitted Data:', data)
+    alert('Form submitted successfully')
+  }
+
+  render() {
+    const { errors } = this.state
+
+    return (
+      <div className='App'>
+        <h3>Add Student</h3>
+
+        <form onSubmit={this.handleSubmit} noValidate>
+          <div>
+            <label>First Name</label>
+            <input
+              type='text'
+              name='firstName'
+              value={this.state.firstName}
+              onChange={this.handleChange}
+            />
+            {errors.firstName && (
+              <p style={{ color: 'red' }}>{errors.firstName}</p>
+            )}
+          </div>
+
+          <div>
+            <label>Last Name</label>
+            <input
+              type='text'
+              name='lastName'
+              value={this.state.lastName}
+              onChange={this.handleChange}
+            />
+            {errors.lastName && (
+              <p style={{ color: 'red' }}>{errors.lastName}</p>
+            )}
+          </div>
+
+          <div>
+            <label>Email</label>
+            <input
+              type='email'
+              name='email'
+              value={this.state.email}
+              onChange={this.handleChange}
+            />
+            {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+          </div>
+
+          <div>
+            <label>Telephone</label>
+            <input
+              type='tel'
+              name='tel'
+              value={this.state.tel}
+              onChange={this.handleChange}
+            />
+            {errors.tel && <p style={{ color: 'red' }}>{errors.tel}</p>}
+          </div>
+
+          <div>
+            <label>Country</label>
+            <select
+              name='country'
+              value={this.state.country}
+              onChange={this.handleChange}
+            >
+              {selectedOptions}
+            </select>
+            {errors.country && (
+              <p style={{ color: 'red' }}>{errors.country}</p>
+            )}
+          </div>
+
+          <div>
+            <p>Gender</p>
+
+            <input
+              type='radio'
+              name='gender'
+              value='Female'
+              checked={this.state.gender === 'Female'}
+              onChange={this.handleChange}
+            />{' '}
+            Female
+
+            <input
+              type='radio'
+              name='gender'
+              value='Male'
+              checked={this.state.gender === 'Male'}
+              onChange={this.handleChange}
+            />{' '}
+            Male
+
+            <input
+              type='radio'
+              name='gender'
+              value='Other'
+              checked={this.state.gender === 'Other'}
+              onChange={this.handleChange}
+            />{' '}
+            Other
+
+            {errors.gender && <p style={{ color: 'red' }}>{errors.gender}</p>}
+          </div>
+
+          <div>
+            <p>Skills</p>
+
+            <input
+              type='checkbox'
+              name='html'
+              checked={this.state.skills.html}
+              onChange={this.handleChange}
+            />{' '}
+            HTML
+
+            <input
+              type='checkbox'
+              name='css'
+              checked={this.state.skills.css}
+              onChange={this.handleChange}
+            />{' '}
+            CSS
+
+            <input
+              type='checkbox'
+              name='javascript'
+              checked={this.state.skills.javascript}
+              onChange={this.handleChange}
+            />{' '}
+            JavaScript
+          </div>
+
+          <div>
+            <textarea
+              name='bio'
+              value={this.state.bio}
+              onChange={this.handleChange}
+              placeholder='Write about yourself...'
+            />
+          </div>
+
+          <div>
+            <input type='file' name='file' onChange={this.handleChange} />
+          </div>
+
+          <button type='submit'>Submit</button>
+        </form>
+      </div>
+    )
+  }
+}
+```
+
+### Function Component
+
+```jsx
+import React, { useState } from 'react'
+
+const options = [
+  { value: '', label: '-- Select Country --' },
+  { value: 'Finland', label: 'Finland' },
+  { value: 'Sweden', label: 'Sweden' },
+  { value: 'Norway', label: 'Norway' },
+  { value: 'Denmark', label: 'Denmark' },
+]
+
+const selectOptions = options.map(({ value, label }) => (
+  <option key={value} value={value}>
+    {label}
+  </option>
+))
+
+const App = () => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    country: '',
+    tel: '',
+    dateOfBirth: '',
+    favoriteColor: '',
+    weight: '',
+    gender: '',
+    file: null,
+    bio: '',
+    skills: {
+      html: false,
+      css: false,
+      javascript: false,
+    },
+    errors: {},
+  })
+
+  const handleChange = (e) => {
+    const { name, value, type, checked, files } = e.target
+
+    if (type === 'checkbox') {
+      setFormData((prev) => ({
+        ...prev,
+        skills: {
+          ...prev.skills,
+          [name]: checked,
+        },
+      }))
+    } else if (type === 'file') {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: files[0],
+      }))
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }))
+    }
+  }
+
+  const validate = () => {
+    const errors = {}
+
+    if (!formData.firstName) {
+      errors.firstName = 'First name is required'
+    } else if (formData.firstName.length < 3 || formData.firstName.length > 12) {
+      errors.firstName = 'First name must be 3-12 characters'
+    }
+
+    if (!formData.lastName) {
+      errors.lastName = 'Last name is required'
+    }
+
+    if (!formData.email || !formData.email.includes('@')) {
+      errors.email = 'Valid email is required'
+    }
+
+    if (!formData.tel) {
+      errors.tel = 'Phone number is required'
+    }
+
+    if (!formData.country) {
+      errors.country = 'Please select a country'
+    }
+
+    if (!formData.gender) {
+      errors.gender = 'Please select gender'
+    }
+
+    return errors
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    const errors = validate()
+
+    if (Object.keys(errors).length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        errors,
+      }))
+      return
+    }
+
+    const formattedSkills = Object.keys(formData.skills)
+      .filter((key) => formData.skills[key])
+      .map((key) => key.toUpperCase())
+
+    const data = {
+      ...formData,
+      skills: formattedSkills,
+      errors: {},
+    }
+
+    console.log('Submitted Data:', data)
+    alert('Form submitted successfully')
+  }
+
+  return (
+    <div className='App'>
+      <h3>Add Student</h3>
+
+      <form onSubmit={handleSubmit} noValidate>
+        <div>
+          <label>First Name</label>
+          <input
+            type='text'
+            name='firstName'
+            value={formData.firstName}
+            onChange={handleChange}
+          />
+          {formData.errors.firstName && (
+            <p style={{ color: 'red' }}>{formData.errors.firstName}</p>
+          )}
+        </div>
+
+        <div>
+          <label>Last Name</label>
+          <input
+            type='text'
+            name='lastName'
+            value={formData.lastName}
+            onChange={handleChange}
+          />
+          {formData.errors.lastName && (
+            <p style={{ color: 'red' }}>{formData.errors.lastName}</p>
+          )}
+        </div>
+
+        <div>
+          <label>Email</label>
+          <input
+            type='email'
+            name='email'
+            value={formData.email}
+            onChange={handleChange}
+          />
+          {formData.errors.email && (
+            <p style={{ color: 'red' }}>{formData.errors.email}</p>
+          )}
+        </div>
+
+        <div>
+          <label>Telephone</label>
+          <input
+            type='tel'
+            name='tel'
+            value={formData.tel}
+            onChange={handleChange}
+          />
+          {formData.errors.tel && (
+            <p style={{ color: 'red' }}>{formData.errors.tel}</p>
+          )}
+        </div>
+
+        <div>
+          <label>Country</label>
+          <select name='country' value={formData.country} onChange={handleChange}>
+            {selectOptions}
+          </select>
+          {formData.errors.country && (
+            <p style={{ color: 'red' }}>{formData.errors.country}</p>
+          )}
+        </div>
+
+        <div>
+          <p>Gender</p>
+          <input
+            type='radio'
+            name='gender'
+            value='Female'
+            checked={formData.gender === 'Female'}
+            onChange={handleChange}
+          />{' '}
+          Female
+          <input
+            type='radio'
+            name='gender'
+            value='Male'
+            checked={formData.gender === 'Male'}
+            onChange={handleChange}
+          />{' '}
+          Male
+          <input
+            type='radio'
+            name='gender'
+            value='Other'
+            checked={formData.gender === 'Other'}
+            onChange={handleChange}
+          />{' '}
+          Other
+          {formData.errors.gender && (
+            <p style={{ color: 'red' }}>{formData.errors.gender}</p>
+          )}
+        </div>
+
+        <div>
+          <p>Skills</p>
+          <input
+            type='checkbox'
+            name='html'
+            checked={formData.skills.html}
+            onChange={handleChange}
+          />{' '}
+          HTML
+          <input
+            type='checkbox'
+            name='css'
+            checked={formData.skills.css}
+            onChange={handleChange}
+          />{' '}
+          CSS
+          <input
+            type='checkbox'
+            name='javascript'
+            checked={formData.skills.javascript}
+            onChange={handleChange}
+          />{' '}
+          JavaScript
+        </div>
+
+        <div>
+          <textarea
+            name='bio'
+            value={formData.bio}
+            onChange={handleChange}
+            placeholder='Write about yourself...'
+          />
+        </div>
+
+        <div>
+          <input type='file' name='file' onChange={handleChange} />
+        </div>
+
+        <button type='submit'>Submit</button>
+      </form>
+    </div>
+  )
+}
+
+export default App
+```
+
+## Quick Notes
+
+- `onChange` is used to listen for changes in input fields.
+- `onBlur` is used when an input loses focus.
+- `onSubmit` is used on the `form` element.
+- `e.preventDefault()` prevents the browser from reloading the page when a form is submitted.
+- A checkbox returns `true` or `false` through `e.target.checked`.
+- A controlled input is an input whose value is managed by React state.
+
+## Exercises
+
+1. What is the importance of a form?
+2. How many input types do you know?
+3. Mention at least four attributes of an input element.
+4. What is the importance of `htmlFor`?
+5. Write an input type that is not included in the example.
+6. What is a controlled input?
+7. What do you need to create a controlled input?
+8. Which event do you use to listen for changes on an input field?
+9. What is the value of a checked checkbox?
+10. When do you use `onChange`, `onBlur`, and `onSubmit`?
+11. What is the purpose of writing `e.preventDefault()` inside the submit handler?
+12. How do you bind data in React?
+13. What is validation?
+14. Which event do you use to listen when an input changes?
+15. Which event types do you use to validate an input?

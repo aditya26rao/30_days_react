@@ -9,9 +9,7 @@ const options = [
 ]
 
 const selectOptions = options.map(({ value, label }) => (
-  <option key={value} value={value}>
-    {label}
-  </option>
+  <option key={value} value={value}>{label}</option>
 ))
 
 const App = () => {
@@ -25,163 +23,186 @@ const App = () => {
     favoriteColor: '',
     weight: '',
     gender: '',
-    file: '',
+    file: null,
     bio: '',
     skills: {
       html: false,
       css: false,
       javascript: false,
-    }
+    },
+    errors: {},
   })
 
+  // ✅ Handle Change
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target
 
     if (type === 'checkbox') {
-      setFormData({
-        ...formData,
+      setFormData((prev) => ({
+        ...prev,
         skills: {
-          ...formData.skills,
+          ...prev.skills,
           [name]: checked,
         },
-      })
-    } else if (type === 'file') {
-      setFormData({
-        ...formData,
+      }))
+    }
+    else if (type === 'file') {
+      setFormData((prev) => ({
+        ...prev,
         [name]: files[0],
-      })
-    } else {
-      setFormData({
-        ...formData,
+      }))
+    }
+    else {
+      setFormData((prev) => ({
+        ...prev,
         [name]: value,
-      })
+      }))
     }
   }
 
+  // ✅ Validation
+  const validate = () => {
+    const errors = {}
+
+    if (!formData.firstName) {
+      errors.firstName = 'First name is required'
+    } else if (formData.firstName.length < 3 || formData.firstName.length > 12) {
+      errors.firstName = 'First name must be 3–12 characters'
+    }
+
+    if (!formData.lastName) {
+      errors.lastName = 'Last name is required'
+    }
+
+    if (!formData.email || !formData.email.includes('@')) {
+      errors.email = 'Valid email is required'
+    }
+
+    if (!formData.tel) {
+      errors.tel = 'Phone number is required'
+    }
+
+    if (!formData.country) {
+      errors.country = 'Please select a country'
+    }
+
+    if (!formData.gender) {
+      errors.gender = 'Please select gender'
+    }
+
+    return errors
+  }
+
+  // ✅ Submit
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(formData) // ✅ skills stays object
+
+    const errors = validate()
+
+    if (Object.keys(errors).length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        errors,
+      }))
+      return
+    }
+
+    const formattedSkills = Object.keys(formData.skills)
+      .filter((key) => formData.skills[key])
+      .map((key) => key.toUpperCase())
+
+    const data = {
+      ...formData,
+      skills: formattedSkills,
+    }
+
+    console.log('Submitted Data:', data)
+    alert('Form submitted successfully 🚀')
+
+    // Reset
+    setFormData({
+      firstName: '',
+      lastName: '',
+      email: '',
+      country: '',
+      tel: '',
+      dateOfBirth: '',
+      favoriteColor: '',
+      weight: '',
+      gender: '',
+      file: null,
+      bio: '',
+      skills: {
+        html: false,
+        css: false,
+        javascript: false,
+      },
+      errors: {},
+    })
   }
 
   return (
-    <div className='App'>
+    <div className="App">
       <h3>Add Student</h3>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type='text'
-          name='firstName'
-          value={formData.firstName}
-          onChange={handleChange}
-          placeholder='First Name'
-        />
+      <form onSubmit={handleSubmit} noValidate>
 
-        <input
-          type='text'
-          name='lastName'
-          value={formData.lastName}
-          onChange={handleChange}
-          placeholder='Last Name'
-        />
+        <div>
+          <label>First Name</label>
+          <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} />
+          {formData.errors.firstName && <p style={{ color: 'red' }}>{formData.errors.firstName}</p>}
+        </div>
 
-        <input
-          type='email'
-          name='email'
-          value={formData.email}
-          onChange={handleChange}
-          placeholder='Email'
-        />
+        <div>
+          <label>Last Name</label>
+          <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} />
+          {formData.errors.lastName && <p style={{ color: 'red' }}>{formData.errors.lastName}</p>}
+        </div>
 
-        <input
-          type='tel'
-          name='tel'
-          value={formData.tel}
-          onChange={handleChange}
-          placeholder='Tel'
-        />
+        <div>
+          <label>Email</label>
+          <input type="email" name="email" value={formData.email} onChange={handleChange} />
+          {formData.errors.email && <p style={{ color: 'red' }}>{formData.errors.email}</p>}
+        </div>
 
-        <input
-          type='date'
-          name='dateOfBirth'
-          value={formData.dateOfBirth}
-          onChange={handleChange}
-        />
+        <div>
+          <label>Telephone</label>
+          <input type="tel" name="tel" value={formData.tel} onChange={handleChange} />
+          {formData.errors.tel && <p style={{ color: 'red' }}>{formData.errors.tel}</p>}
+        </div>
 
-        <input
-          type='color'
-          name='favoriteColor'
-          value={formData.favoriteColor}
-          onChange={handleChange}
-        />
+        <div>
+          <label>Country</label>
+          <select name="country" value={formData.country} onChange={handleChange}>
+            {selectOptions}
+          </select>
+          {formData.errors.country && <p style={{ color: 'red' }}>{formData.errors.country}</p>}
+        </div>
 
-        <input
-          type='number'
-          name='weight'
-          value={formData.weight}
-          onChange={handleChange}
-          placeholder='Weight'
-        />
+        <div>
+          <p>Gender</p>
+          <input type="radio" name="gender" value="Female" checked={formData.gender === 'Female'} onChange={handleChange} /> Female
+          <input type="radio" name="gender" value="Male" checked={formData.gender === 'Male'} onChange={handleChange} /> Male
+          <input type="radio" name="gender" value="Other" checked={formData.gender === 'Other'} onChange={handleChange} /> Other
+          {formData.errors.gender && <p style={{ color: 'red' }}>{formData.errors.gender}</p>}
+        </div>
 
-        <select
-          name='country'
-          value={formData.country}
-          onChange={handleChange}
-        >
-          {selectOptions}
-        </select>
+        <div>
+          <p>Skills</p>
+          <input type="checkbox" name="html" checked={formData.skills.html} onChange={handleChange} /> HTML
+          <input type="checkbox" name="css" checked={formData.skills.css} onChange={handleChange} /> CSS
+          <input type="checkbox" name="javascript" checked={formData.skills.javascript} onChange={handleChange} /> JavaScript
+        </div>
 
-        {/* Gender */}
-        <input
-          type='radio'
-          name='gender'
-          value='Male'
-          checked={formData.gender === 'Male'}
-          onChange={handleChange}
-        /> Male
+        <div>
+          <textarea name="bio" value={formData.bio} onChange={handleChange} placeholder="Write about yourself..." />
+        </div>
 
-        <input
-          type='radio'
-          name='gender'
-          value='Female'
-          checked={formData.gender === 'Female'}
-          onChange={handleChange}
-        /> Female
+        <div>
+          <input type="file" name="file" onChange={handleChange} />
+        </div>
 
-        {/* Skills */}
-        <input
-          type='checkbox'
-          name='html'
-          checked={formData.skills.html}
-          onChange={handleChange}
-        /> HTML
-
-        <input
-          type='checkbox'
-          name='css'
-          checked={formData.skills.css}
-          onChange={handleChange}
-        /> CSS
-
-        <input
-          type='checkbox'
-          name='javascript'
-          checked={formData.skills.javascript}
-          onChange={handleChange}
-        /> JS
-
-        <textarea
-          name='bio'
-          value={formData.bio}
-          onChange={handleChange}
-        />
-
-        <input
-          type='file'
-          name='file'
-          onChange={handleChange}
-        />
-
-        <button type='submit'>Submit</button>
+        <button type="submit">Submit</button>
       </form>
     </div>
   )
